@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cake.GetNuGetLicense
+namespace Cake.GetNuGetLicense.Test
 {
     public class Class1
     {

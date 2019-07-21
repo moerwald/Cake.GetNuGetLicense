@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.GetNuGetLicense", "Cake.GetNuGetLicense\Cake.GetNuGetLicense.csproj", "{57E1CA77-E262-4C47-ADCF-1CC1FD24DC20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cake.GetNuGetLicense", "Cake.GetNuGetLicense\Cake.GetNuGetLicense.csproj", "{57E1CA77-E262-4C47-ADCF-1CC1FD24DC20}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cake.GetNuGetLicense.Test", "Cake.GetNuGetLicense.Test\Cake.GetNuGetLicense.Test.csproj", "{A4A9CD28-E825-4621-9056-B8D45F098EDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{57E1CA77-E262-4C47-ADCF-1CC1FD24DC20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57E1CA77-E262-4C47-ADCF-1CC1FD24DC20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57E1CA77-E262-4C47-ADCF-1CC1FD24DC20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4A9CD28-E825-4621-9056-B8D45F098EDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4A9CD28-E825-4621-9056-B8D45F098EDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4A9CD28-E825-4621-9056-B8D45F098EDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4A9CD28-E825-4621-9056-B8D45F098EDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
