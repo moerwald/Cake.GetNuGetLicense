@@ -1,0 +1,90 @@
+# .NET Desktop
+
+# Build and run tests for .NET Desktop or Windows classic desktop solutions.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+
+trigger:
+- develop
+
+pool:
+  vmImage: 'VS2017-Win2016'
+
+variables:
+  buildConfiguration: 'Release'
+  buildId: "1$(Build.BuildId)"
+
+steps:
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'Sonarcloud'
+    organization: 'moerwald-github'
+    scannerMode: 'MSBuild'
+    projectKey: 'moerwald_Cake.GetNuGetLicense'
+    projectName: 'Cake.GetNuGetLicense'
+
+# Install SonarScanner
+- script: |
+     dotnet tool install --global dotnet-sonarscanner
+  displayName: 'install sonarscanner'
+  
+# Run Sonar
+- script: |
+     dotnet sonarscanner begin /k:"moerwald_Cake.GetNuGetLicense" 
+  displayName: 'sonarscanner begin'
+    
+# Compile   
+- script: |
+    cd src
+    dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildConfiguration)'
+- script: |
+    cd src
+    dotnet pack --configuration $(buildConfiguration)
+  displayName: 'dotnet pack $(buildConfiguration)'
+  
+# Run tests, opencover format is needed for sonar, therefore we need to run tests twice
+- script: |
+    echo $(Build.SourcesDirectory)
+    cd src
+    mkdir $(Build.SourcesDirectory)\results
+    dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura  
+    copy Cake.GetNuGetLicense.Test\coverage.cobertura.xml $(Build.SourcesDirectory)\results
+    dotnet tool install dotnet-reportgenerator-globaltool --tool-path . --version 4.0.0-rc4
+    .\reportgenerator "-reports:$(Build.SourcesDirectory)\results\coverage.cobertura.xml" "-targetdir:$(Build.SourcesDirectory)\results" "-reporttypes:HTMLInline;HTMLChart"
+    dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=opencover 
+  displayName: 'Unit testing' 
+
+   
+# End SonarScanner
+- script: |
+    dotnet sonarscanner end 
+  displayName: 'sonarscanner end'
+
+    
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+   
+  
+- task: PublishTestResults@2
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: '**/*.trx'
+- task: PublishCodeCoverageResults@1
+  inputs:
+    summaryFileLocation: $(Build.SourcesDirectory)\results\coverage.cobertura.xml
+    reportDirectory: $(Build.SourcesDirectory)\results
+    codecoverageTool: cobertura
+    
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    projects: src\Cake.GetNuGetLicense\Cake.GetNuGetLicense.csproj
+    publishWebProjects: false
+    modifyOutputPath: true
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
