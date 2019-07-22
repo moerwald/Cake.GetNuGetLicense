@@ -9,7 +9,7 @@
     public static class GetNuGetLicenseAlias
     {
         [CakeMethodAlias]
-        public static void GetNuGetLicense(this CakeContext context, IEnumerable<string> pathsToProjects)
+        public static void GetNuGetLicense(this CakeContext context, IEnumerable<string> rootPathsToScan)
         {
             // Parameter checks
             if (context == null)
@@ -17,9 +17,9 @@
                 throw new System.ArgumentNullException(nameof(context));
             }
 
-            if (pathsToProjects == null || !pathsToProjects.Any())
+            if (rootPathsToScan == null || !rootPathsToScan.Any())
             {
-                throw new System.ArgumentNullException(nameof(pathsToProjects));
+                throw new System.ArgumentNullException(nameof(rootPathsToScan));
             }
 
             context?.Log.Write(Core.Diagnostics.Verbosity.Normal, Core.Diagnostics.LogLevel.Information, "Hello World");
